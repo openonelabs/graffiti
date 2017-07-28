@@ -1,5 +1,5 @@
-//var ConvertLib = artifacts.require("./ConvertLib.sol");
+var Message = artifacts.require("./Message.sol");
 
 module.exports = function(deployer) {
-  //deployer.deploy(MetaCoin);
+  deployer.deploy(Message);
 };
