@@ -8,6 +8,9 @@ contract Message {
   // declare storage object
   bytes[] messages;
 
+  // declare reference number for current message index
+  uint256 messageIndex = 0;
+
   // declare owner
   address private owner;
 
@@ -32,10 +35,28 @@ contract Message {
     currentFee = fee;
   }
 
+  // change owner
+  function changeOwner(address newOwner) onlyOwner {
+    owner = newOwner;
+  }
+
   // function post
-       // write to storage
-       // check for anything?
-       // pay tax to owner
-       
+
+  function post(bytes message) payable{
+    // check to make sure the sent amount is >= current fee
+    if (msg.value < currentFee) throw;
+
+   // pay tax to owner
+    owner.transfer(currentFee);
+  
+   // write to storage
+    messageIndex = messages.push(message);
+    
+  }
+
+  // get post by id
+  function getPost(uint256 index) constant returns (bytes post) {
+    return messages[index];
+  }   
 
 }
