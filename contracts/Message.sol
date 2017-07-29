@@ -3,8 +3,6 @@ pragma solidity ^0.4.11;
 
 contract Message {
 
-  // define storage object
-
   // declare storage object
   bytes[] messages;
 
@@ -16,6 +14,9 @@ contract Message {
 
   // declare fee
   uint256 private currentFee = 50000000000000; // ~ $.01 at time of writing
+
+  // create listener to return latest index
+  event logIndex(uint256 index);
 
   // constructor
   function Message(){
@@ -52,6 +53,8 @@ contract Message {
    // write to storage
     messageIndex = messages.push(message);
     
+    // return the index
+    logIndex(messageIndex);
   }
 
   // get post by id

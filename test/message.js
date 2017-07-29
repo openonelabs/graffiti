@@ -101,8 +101,8 @@ contract('Message', function(accounts){
   it("Can get post", function() {
     return Message.new().then(function(instance) {
       return instance.post(post, {from: poster, value: vig}).then(function() {     
-        return instance.getPost.call(0).then(function(data) {
-          assert.equal(Helper.hex2a(data), post);
+        return instance.getPost.call(0).then(function(postMsg) {
+          assert.equal(Helper.hex2a(postMsg.toLocaleString()), post);
         });
       });
     });
@@ -110,8 +110,8 @@ contract('Message', function(accounts){
 
   it("Cannot get post w/ high index", function() {
     return Message.new().then(function(instance) {
-      return instance.post(post, {from: poster, value: vig}).then(function() {
-        return instance.getPost.call(1).then(function(response) {
+      return instance.post(post, {from: poster, value: vig}).then(function() {     
+        return instance.getPost.call(1).then(function(postMsg) {
           assert(false);
         }).catch(function(error) {
           assert.include(error.toString(), "invalid opcode");
@@ -119,5 +119,24 @@ contract('Message', function(accounts){
       });
     });
   });
+
+  it("Gets log", function() {
+    return Message.new().then(function(instance) {
+      return instance.post(post, {from: poster, value: vig}).then(function(response) {
+        assert.equal(response.logs[0].args.index.toLocaleString(), 1);
+      });
+    });
+  });
+
+  it("Increments", function() {
+    return Message.new().then(function(instance) {
+      return instance.post(post, {from: poster, value: vig}).then(function() {
+        return instance.post(post, {from: poster, value: vig}).then(function(response) {
+          assert.equal(response.logs[0].args.index.toLocaleString(), 2);
+        });
+      });
+    });
+  });
+	  
 
 });
