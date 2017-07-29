@@ -138,5 +138,11 @@ contract('Message', function(accounts){
     });
   });
 	  
-
+  it("Can get messageIndex", function() {
+    return Message.new().then(function(instance) {
+      return instance.messageIndex().then(function(index) {
+        assert.equal(index, 0);
+      });
+    });
+  });
 });

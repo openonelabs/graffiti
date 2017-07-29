@@ -7,7 +7,7 @@ contract Message {
   bytes[] messages;
 
   // declare reference number for current message index
-  uint256 messageIndex = 0;
+  uint256 public messageIndex = 0;
 
   // declare owner
   address private owner;

@@ -34,7 +34,7 @@ window.postNewMessage = function(message) {
       contractInstance.post(newMessage, {value: 50000000000000, gas: 140000, from: web3.eth.accounts[0]}).then(function() {
         let div_id = "board";
         return contractInstance.getPost.call(0).then(function(postedMsg) {
-          $("#" + div_id).html(postedMsg.toLocaleString());
+          $("#" + div_id).append(postedMsg.toLocaleString());
           $("#msg").html("");
         });
       });
@@ -57,8 +57,14 @@ $( document ).ready(function() {
 
   Message.setProvider(web3.currentProvider);
   Message.deployed().then(function(contractInstance) {
-    contractInstance.getPost.call(0).then(function(postedMsg) {
-      $("#board").html(postedMsg.toLocaleString());
+    contractInstance.messageIndex().then(function(index) {
+      for (var i=0; i<index; i++) {
+        Message.deployed().then(function(contractInstance) {
+          contractInstance.getPost.call(index).then(function(postedMsg) {
+            $("#board").append(postedMsg.toLocaleString() + " || ");
+          });
+        });
+      }
     });
   });
 });
