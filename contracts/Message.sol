@@ -31,7 +31,7 @@ contract Message {
 
   // change tax amount (only owner)
   function changeFee(uint256 fee) onlyOwner {
-    if (fee > currentFee) throw;  // only lower the fee
+    require(fee <= currentFee);  // only lower the fee
 
     currentFee = fee;
   }
@@ -42,10 +42,9 @@ contract Message {
   }
 
   // function post
-
   function post(bytes message) payable{
     // check to make sure the sent amount is >= current fee
-    if (msg.value < currentFee) throw;
+    require(msg.value >= currentFee);
 
    // pay tax to owner
     owner.transfer(currentFee);
